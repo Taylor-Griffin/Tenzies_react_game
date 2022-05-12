@@ -40,6 +40,10 @@ main {
     background-color: white;
 }
 
+.die-face--held{
+    background-color: #59e391;
+}
+
 .die-num {
     font-size: 2rem;
 }
