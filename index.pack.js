@@ -903,7 +903,7 @@ function App() {
     _react2.default.createElement(
       'button',
       { className: 'roll-dice', onClick: rollDice },
-      tenzies ? 'Reset' : 'Roll'
+      tenzies ? 'New Game' : 'Roll'
     )
   );
 }
