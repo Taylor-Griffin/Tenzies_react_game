@@ -522,24 +522,60 @@ var _nanoid = __webpack_require__(9);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function App() {
-  var _React$useState = _react2.default.useState(allNewDice()),
-      _React$useState2 = _slicedToArray(_React$useState, 2),
-      dice = _React$useState2[0],
-      setDice = _React$useState2[1];
+  var _useState = (0, _react.useState)(allNewDice()),
+      _useState2 = _slicedToArray(_useState, 2),
+      dice = _useState2[0],
+      setDice = _useState2[1];
+
+  var _useState3 = (0, _react.useState)(false),
+      _useState4 = _slicedToArray(_useState3, 2),
+      tenzies = _useState4[0],
+      setTenzies = _useState4[1];
+
+  (0, _react.useEffect)(function () {
+    var allHeld = dice.every(function (die) {
+      return die.isHeld;
+    });
+    var firstValue = dice[0].value;
+    var allSameValue = dice.every(function (die) {
+      return die.value === firstValue;
+    });
+    if (allHeld && allSameValue) {
+      setTenzies(true);
+    }
+  }, [dice]);
+
+  function getRandomNumber() {
+    return Math.ceil(Math.random() * 6);
+  }
+  function generateNewDie() {
+    return {
+      value: getRandomNumber(),
+      isHeld: false,
+      id: (0, _nanoid.nanoid)()
+    };
+  }
 
   function allNewDice() {
     var newDice = [];
     for (var i = 0; i < 10; i++) {
-      newDice.push({
-        value: Math.ceil(Math.random() * 6),
-        isHeld: false,
-        id: (0, _nanoid.nanoid)()
-      });
+      newDice.push(generateNewDie());
     }
     return newDice;
   }
+  function rollDice() {
+    setDice(function (oldDice) {
+      return tenzies ? allNewDice() : oldDice.map(function (die) {
+        return die.isHeld ? die : generateNewDie();
+      });
+    });
+  }
   function holdDice(id) {
-    console.log(id);
+    setDice(function (oldDice) {
+      return oldDice.map(function (die) {
+        return id === die.id ? { value: die.value, id: die.id, isHeld: !die.isHeld } : die;
+      });
+    });
   }
 
   var diceElements = dice.map(function (_ref) {
@@ -553,16 +589,24 @@ function App() {
     'main',
     null,
     _react2.default.createElement(
+      'h1',
+      { className: 'title' },
+      'Tenzies'
+    ),
+    _react2.default.createElement(
+      'p',
+      { className: 'instructions' },
+      'Roll until all dice are the same. Click each die to freeze it at its current value between rolls.'
+    ),
+    _react2.default.createElement(
       'div',
       { className: 'dice-container' },
       diceElements
     ),
     _react2.default.createElement(
       'button',
-      { className: 'roll-dice', onClick: function onClick() {
-          return setDice(allNewDice());
-        } },
-      'Roll Dice'
+      { className: 'roll-dice', onClick: rollDice },
+      tenzies ? 'Reset' : 'Roll'
     )
   );
 }
