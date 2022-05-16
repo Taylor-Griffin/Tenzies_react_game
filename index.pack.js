@@ -821,6 +821,16 @@ function App() {
       tenzies = _useState4[0],
       setTenzies = _useState4[1];
 
+  var _useState5 = (0, _react.useState)(1),
+      _useState6 = _slicedToArray(_useState5, 2),
+      rolls = _useState6[0],
+      setRolls = _useState6[1];
+
+  var _useState7 = (0, _react.useState)(0),
+      _useState8 = _slicedToArray(_useState7, 2),
+      time = _useState8[0],
+      setTime = _useState8[1];
+
   (0, _react.useEffect)(function () {
     var allHeld = dice.every(function (die) {
       return die.isHeld;
@@ -833,6 +843,24 @@ function App() {
       setTenzies(true);
     }
   }, [dice]);
+
+  (0, _react.useEffect)(function () {
+    var timer = void 0;
+    timer = setInterval(function () {
+      setTime(function (time) {
+        return time + 1;
+      });
+    }, 1000);
+    if (tenzies) {
+      clearInterval(timer);
+      setTime(0);
+    }
+    setTime(timer);
+
+    return function () {
+      return clearInterval(timer);
+    };
+  }, [tenzies]);
 
   function getRandomNumber() {
     return Math.ceil(Math.random() * 6);
@@ -854,13 +882,20 @@ function App() {
     return newDice;
   }
   function rollDice() {
-    setTenzies(false);
-
-    setDice(function (oldDice) {
-      return tenzies ? allNewDice() : oldDice.map(function (die) {
-        return die.isHeld ? die : generateNewDie();
+    if (!tenzies) {
+      setRolls(function (rolls) {
+        return rolls + 1;
       });
-    });
+      setDice(function (oldDice) {
+        return oldDice.map(function (die) {
+          return die.isHeld ? die : generateNewDie();
+        });
+      });
+    } else {
+      setTenzies(false);
+      setDice(allNewDice());
+      setRolls(1);
+    }
   }
   function holdDice(id) {
     setDice(function (oldDice) {
@@ -904,6 +939,17 @@ function App() {
       'button',
       { className: 'roll-dice', onClick: rollDice },
       tenzies ? 'New Game' : 'Roll'
+    ),
+    _react2.default.createElement(
+      'p',
+      null,
+      'Number of rolls: ',
+      rolls
+    ),
+    _react2.default.createElement(
+      'p',
+      null,
+      time
     )
   );
 }

@@ -7,6 +7,8 @@ import Confetti from 'react-confetti';
 export default function App() {
   const [dice, setDice] = useState(allNewDice());
   const [tenzies, setTenzies] = useState(false);
+  const [rolls, setRolls] = useState(1);
+  const [time, setTime] = useState(0);
 
   useEffect(() => {
     const allHeld = dice.every((die) => die.isHeld);
@@ -16,6 +18,20 @@ export default function App() {
       setTenzies(true);
     }
   }, [dice]);
+
+  useEffect(() => {
+    let timer;
+    timer = setInterval(() => {
+      setTime((time) => time + 1);
+    }, 1000);
+    if (tenzies) {
+      clearInterval(timer);
+      setTime(0);
+    }
+    setTime(timer);
+
+    return () => clearInterval(timer);
+  }, [tenzies]);
 
   function getRandomNumber() {
     return Math.ceil(Math.random() * 6);
@@ -37,15 +53,18 @@ export default function App() {
     return newDice;
   }
   function rollDice() {
-    setTenzies(false);
-
-    setDice((oldDice) =>
-      tenzies
-        ? allNewDice()
-        : oldDice.map((die) => {
-            return die.isHeld ? die : generateNewDie();
-          })
-    );
+    if (!tenzies) {
+      setRolls((rolls) => rolls + 1);
+      setDice((oldDice) =>
+        oldDice.map((die) => {
+          return die.isHeld ? die : generateNewDie();
+        })
+      );
+    } else {
+      setTenzies(false);
+      setDice(allNewDice());
+      setRolls(1);
+    }
   }
   function holdDice(id) {
     setDice((oldDice) =>
@@ -76,6 +95,8 @@ export default function App() {
       <button className="roll-dice" onClick={rollDice}>
         {tenzies ? 'New Game' : 'Roll'}
       </button>
+      <p>Number of rolls: {rolls}</p>
+      <p>{time}</p>
     </main>
   );
 }
