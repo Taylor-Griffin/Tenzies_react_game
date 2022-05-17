@@ -30,7 +30,6 @@ export default function App() {
     if (active) {
       timer = setInterval(() => {
         setTime((time) => time + 1);
-        console.log('trigger on');
       }, 1000);
     }
 
@@ -69,6 +68,7 @@ export default function App() {
       setDice(allNewDice());
       setRolls(1);
       setTime(0);
+      setActive(true);
     }
   }
   function holdDice(id) {
@@ -100,9 +100,11 @@ export default function App() {
       <button className="roll-dice" onClick={rollDice}>
         {tenzies ? 'New Game' : 'Roll'}
       </button>
-      <p>Number of rolls: {rolls}</p>
-      <p>Time: {time} sec</p>
-      <p>Best Time: {bestTime} sec</p>
+      <section className="data-section">
+        <p>Number of rolls: {rolls}</p>
+        <p>Time: {time} sec</p>
+        <p>Best Time: {bestTime} sec</p>
+      </section>
     </main>
   );
 }

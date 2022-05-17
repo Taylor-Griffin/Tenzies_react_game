@@ -14,7 +14,6 @@ body {
 
 main {
     background-color: #F5F5F5;
-    height: 400px;
     width: 800px;
     border-radius: 5px;
     padding: 3rem;
@@ -81,4 +80,15 @@ main {
 
 .roll-dice:active{
 box-shadow: inset 5px 5px 10px -3px rgba(0,0,0,0.7);
+}
+
+.data-section{
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: space-around;
+    align-items: center;
+}
+
+.data-section p{
+    margin-right: 1rem;
 }
