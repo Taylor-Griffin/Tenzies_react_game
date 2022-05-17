@@ -808,6 +808,10 @@ var _reactConfetti = __webpack_require__(14);
 
 var _reactConfetti2 = _interopRequireDefault(_reactConfetti);
 
+var _reactUseLocalstorage = __webpack_require__(29);
+
+var _reactUseLocalstorage2 = _interopRequireDefault(_reactUseLocalstorage);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function App() {
@@ -836,7 +840,7 @@ function App() {
       active = _useState10[0],
       setActive = _useState10[1];
 
-  var _useLocalStorage = useLocalStorage('score', 0),
+  var _useLocalStorage = (0, _reactUseLocalstorage2.default)('score', 0),
       _useLocalStorage2 = _slicedToArray(_useLocalStorage, 2),
       bestTime = _useLocalStorage2[0],
       setBestTime = _useLocalStorage2[1];
@@ -968,7 +972,7 @@ function App() {
     _react2.default.createElement(
       'p',
       null,
-      'Time: ',
+      'Best Time: ',
       bestTime,
       ' sec'
     )
@@ -29860,6 +29864,57 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 29 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+
+
+function useLocalStorage(key, initialValue) {
+  if (initialValue === void 0) {
+    initialValue = '';
+  }
+
+  var _useState = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_react__["useState"])(function () {
+    return window.localStorage.getItem(key) || initialValue;
+  }),
+      value = _useState[0],
+      setValue = _useState[1];
+
+  var setItem = function setItem(newValue) {
+    setValue(newValue);
+    window.localStorage.setItem(key, newValue);
+  };
+
+  __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_react__["useEffect"])(function () {
+    var newValue = window.localStorage.getItem(key);
+
+    if (value !== newValue) {
+      setValue(newValue || initialValue);
+    }
+  });
+  var handleStorage = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_react__["useCallback"])(function (event) {
+    if (event.key === key && event.newValue !== value) {
+      setValue(event.newValue || initialValue);
+    }
+  }, [value]);
+  __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_react__["useEffect"])(function () {
+    window.addEventListener('storage', handleStorage);
+    return function () {
+      return window.removeEventListener('storage', handleStorage);
+    };
+  }, [handleStorage]);
+  return [value, setItem];
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (useLocalStorage);
+//# sourceMappingURL=react-use-localstorage.esm.js.map
+
 
 /***/ })
 /******/ ]);

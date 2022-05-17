@@ -3,6 +3,7 @@ import Die from './Die';
 import { nanoid } from 'nanoid';
 import useWindowSize from 'react-use/lib/useWindowSize';
 import Confetti from 'react-confetti';
+import useLocalStorage from 'react-use-localstorage';
 
 export default function App() {
   const [dice, setDice] = useState(allNewDice());
@@ -101,7 +102,7 @@ export default function App() {
       </button>
       <p>Number of rolls: {rolls}</p>
       <p>Time: {time} sec</p>
-      <p>Time: {bestTime} sec</p>
+      <p>Best Time: {bestTime} sec</p>
     </main>
   );
 }
