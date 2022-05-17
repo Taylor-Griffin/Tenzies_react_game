@@ -64,8 +64,9 @@ main {
 }
 
 .roll-dice{
-    height: 50px;
+    height: 70px;
     width: 120px;
+    padding: 10px;
     border:none;
     background-color: #5035ff;
     color: #fff;

@@ -831,6 +831,16 @@ function App() {
       time = _useState8[0],
       setTime = _useState8[1];
 
+  var _useState9 = (0, _react.useState)(true),
+      _useState10 = _slicedToArray(_useState9, 2),
+      active = _useState10[0],
+      setActive = _useState10[1];
+
+  var _useLocalStorage = useLocalStorage('score', 0),
+      _useLocalStorage2 = _slicedToArray(_useLocalStorage, 2),
+      bestTime = _useLocalStorage2[0],
+      setBestTime = _useLocalStorage2[1];
+
   (0, _react.useEffect)(function () {
     var allHeld = dice.every(function (die) {
       return die.isHeld;
@@ -841,26 +851,27 @@ function App() {
     });
     if (allHeld && allSameValue) {
       setTenzies(true);
+      setActive(false);
+      setTime(time);
+      setBestTime(time);
     }
-  }, [dice]);
+  }, [dice, active, tenzies]);
 
   (0, _react.useEffect)(function () {
     var timer = void 0;
-    timer = setInterval(function () {
-      setTime(function (time) {
-        return time + 1;
-      });
-    }, 1000);
-    if (tenzies) {
-      clearInterval(timer);
-      setTime(0);
+    if (active) {
+      timer = setInterval(function () {
+        setTime(function (time) {
+          return time + 1;
+        });
+        console.log('trigger on');
+      }, 1000);
     }
-    setTime(timer);
 
     return function () {
       return clearInterval(timer);
     };
-  }, [tenzies]);
+  }, [active]);
 
   function getRandomNumber() {
     return Math.ceil(Math.random() * 6);
@@ -895,6 +906,7 @@ function App() {
       setTenzies(false);
       setDice(allNewDice());
       setRolls(1);
+      setTime(0);
     }
   }
   function holdDice(id) {
@@ -949,7 +961,16 @@ function App() {
     _react2.default.createElement(
       'p',
       null,
-      time
+      'Time: ',
+      time,
+      ' sec'
+    ),
+    _react2.default.createElement(
+      'p',
+      null,
+      'Time: ',
+      bestTime,
+      ' sec'
     )
   );
 }

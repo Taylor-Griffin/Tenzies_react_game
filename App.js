@@ -9,6 +9,8 @@ export default function App() {
   const [tenzies, setTenzies] = useState(false);
   const [rolls, setRolls] = useState(1);
   const [time, setTime] = useState(0);
+  const [active, setActive] = useState(true);
+  const [bestTime, setBestTime] = useLocalStorage('score', 0);
 
   useEffect(() => {
     const allHeld = dice.every((die) => die.isHeld);
@@ -16,22 +18,23 @@ export default function App() {
     const allSameValue = dice.every((die) => die.value === firstValue);
     if (allHeld && allSameValue) {
       setTenzies(true);
+      setActive(false);
+      setTime(time);
+      setBestTime(time);
     }
-  }, [dice]);
+  }, [dice, active, tenzies]);
 
   useEffect(() => {
     let timer;
-    timer = setInterval(() => {
-      setTime((time) => time + 1);
-    }, 1000);
-    if (tenzies) {
-      clearInterval(timer);
-      setTime(0);
+    if (active) {
+      timer = setInterval(() => {
+        setTime((time) => time + 1);
+        console.log('trigger on');
+      }, 1000);
     }
-    setTime(timer);
 
     return () => clearInterval(timer);
-  }, [tenzies]);
+  }, [active]);
 
   function getRandomNumber() {
     return Math.ceil(Math.random() * 6);
@@ -64,6 +67,7 @@ export default function App() {
       setTenzies(false);
       setDice(allNewDice());
       setRolls(1);
+      setTime(0);
     }
   }
   function holdDice(id) {
@@ -96,7 +100,8 @@ export default function App() {
         {tenzies ? 'New Game' : 'Roll'}
       </button>
       <p>Number of rolls: {rolls}</p>
-      <p>{time}</p>
+      <p>Time: {time} sec</p>
+      <p>Time: {bestTime} sec</p>
     </main>
   );
 }
