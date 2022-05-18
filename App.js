@@ -22,7 +22,6 @@ export default function App() {
       setActive(false);
       setTime(time);
       setBestTime(time);
-      console.log(time, bestTime);
     }
   }, [dice, active, tenzies]);
 
