@@ -858,6 +858,7 @@ function App() {
       setActive(false);
       setTime(time);
       setBestTime(time);
+      console.log(time, bestTime);
     }
   }, [dice, active, tenzies]);
 
@@ -875,6 +876,10 @@ function App() {
       return clearInterval(timer);
     };
   }, [active]);
+
+  (0, _react.useEffect)(function () {
+    setBestTime(time > bestTime ? time : bestTime);
+  }, [tenzies]);
 
   function getRandomNumber() {
     return Math.ceil(Math.random() * 6);

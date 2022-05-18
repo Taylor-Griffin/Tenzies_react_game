@@ -22,6 +22,7 @@ export default function App() {
       setActive(false);
       setTime(time);
       setBestTime(time);
+      console.log(time, bestTime);
     }
   }, [dice, active, tenzies]);
 
@@ -35,6 +36,10 @@ export default function App() {
 
     return () => clearInterval(timer);
   }, [active]);
+
+  useEffect(() => {
+    setBestTime(time > bestTime ? time : bestTime);
+  }, [tenzies]);
 
   function getRandomNumber() {
     return Math.ceil(Math.random() * 6);
