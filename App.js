@@ -11,7 +11,7 @@ export default function App() {
   const [rolls, setRolls] = useState(1);
   const [time, setTime] = useState(0);
   const [active, setActive] = useState(true);
-  const [bestTime, setBestTime] = useLocalStorage('score', 0);
+  const [bestTime, setBestTime] = useLocalStorage('score', 999999999);
 
   useEffect(() => {
     const allHeld = dice.every((die) => die.isHeld);
@@ -21,7 +21,9 @@ export default function App() {
       setTenzies(true);
       setActive(false);
       setTime(time);
-      setBestTime(time);
+      setBestTime(time < +bestTime ? time : +bestTime);
+      console.log('time:', time, 'bestTime:', bestTime);
+      console.log(typeof bestTime);
     }
   }, [dice, active, tenzies]);
 
@@ -35,10 +37,6 @@ export default function App() {
 
     return () => clearInterval(timer);
   }, [active]);
-
-  useEffect(() => {
-    setBestTime(time > bestTime ? time : bestTime);
-  }, [tenzies]);
 
   function getRandomNumber() {
     return Math.ceil(Math.random() * 6);
@@ -107,7 +105,7 @@ export default function App() {
       <section className="data-section">
         <p>Number of rolls: {rolls}</p>
         <p>Time: {time} sec</p>
-        <p>Best Time: {bestTime} sec</p>
+        <p>Best Time: {bestTime === 999999999 ? 0 : bestTime} sec</p>
       </section>
     </main>
   );
